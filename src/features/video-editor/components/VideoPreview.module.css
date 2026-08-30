@@ -1,0 +1,62 @@
+.wrapper {
+  width: 100%;
+}
+
+.video {
+  width: 100%;
+  border-radius: var(--radius-md);
+  background: var(--color-text);
+  display: block;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
+.metaText {
+  min-width: 0;
+}
+
+.fileName {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 380px;
+}
+
+.fileInfo {
+  margin: 4px 0 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text-faint);
+}
+
+.removeButton {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-bg);
+  color: var(--color-text);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.removeButton:hover {
+  background: var(--color-surface);
+}
+
+@media (max-width: 480px) {
+  .fileName {
+    max-width: 200px;
+  }
+}

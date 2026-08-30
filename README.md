@@ -2,20 +2,33 @@
 
 Corta fragmentos de vídeo directamente en el navegador. Sin backend, sin subir vídeos a ningún servidor: todo el procesamiento ocurre en el dispositivo del usuario con FFmpeg.wasm.
 
-## Estado actual (incremento 1 de la hoja de ruta)
+## Estado actual (incremento 2 de la hoja de ruta)
 
 Implementado:
 
 - Proyecto base con Vite + React + TypeScript (modo estricto).
 - Shell visual de la app (header, contenedor principal, footer) con la paleta blanco/gris.
+- Selección de vídeo (click o arrastrar y soltar) con validación real: extensión,
+  tamaño máximo (500 MB) y firma binaria del archivo (no se confía solo en la
+  extensión ni en el MIME del navegador).
+- Previsualización con el reproductor nativo del navegador (`<video>`), mostrando
+  nombre, tamaño y duración real del archivo.
+- Manejo de memoria: se libera el `Object URL` anterior al cambiar de archivo,
+  al quitar el vídeo y al desmontar el componente.
+- Tests unitarios (Vitest) para la validación de archivos y el formateo de
+  tamaño/duración.
 
 Pendiente (próximos incrementos):
 
-- Selección y carga de vídeo, con validación de tipo/tamaño y preview.
 - Modo automático (segmentos de 60s + resto).
 - Modo manual (el usuario define los cortes que quiera).
 - Integración de FFmpeg.wasm (servicio dedicado, aislado de los componentes).
 - Descarga de los fragmentos resultantes.
+
+Formatos de vídeo aceptados por ahora: MP4, WebM, MOV y OGV (los que los
+navegadores reproducen de forma nativa con `<video>`, necesario para la
+previsualización). Si más adelante hace falta aceptar más contenedores,
+habrá que revisar esta decisión.
 
 ## Cómo ejecutarlo
 
@@ -32,6 +45,21 @@ Esto no se ha instalado ni ejecutado en el entorno donde se generó el código (
 - `npm run build` — build de producción (`tsc -b && vite build`).
 - `npm run preview` — sirve el build de producción localmente.
 - `npm run typecheck` — solo comprobación de tipos.
+- `npm run test` — ejecuta los tests una vez (Vitest).
+- `npm run test:watch` — tests en modo watch.
+
+## Antes de hacer deploy
+
+`npm run dev` **no** hace comprobación de tipos completa (por diseño, para ser rápido). Antes de subir cambios, corre:
+
+```bash
+npm run typecheck
+npm run build
+```
+
+Si estos dos pasan localmente, el deploy en Vercel/Netlify no debería fallar por errores de TypeScript.
+
+(Nota: `src/vite-env.d.ts` es necesario para que TypeScript entienda los imports de `.css` y `.module.css`. Si algún día se borra por error, `tsc -b` fallará con `Cannot find module '...css'` — así se detectó y arregló este archivo la primera vez.)
 
 ## Despliegue
 

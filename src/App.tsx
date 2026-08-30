@@ -1,6 +1,12 @@
+import { VideoDropzone } from './features/video-editor/components/VideoDropzone'
+import { VideoPreview } from './features/video-editor/components/VideoPreview'
+import { useVideoFile } from './features/video-editor/hooks/useVideoFile'
 import styles from './App.module.css'
 
 function App() {
+  const { status, file, videoUrl, duration, errorMessage, selectFile, handleMetadataLoaded, handlePlaybackError, reset } =
+    useVideoFile()
+
   return (
     <div className={styles.appShell}>
       <header className={styles.header}>
@@ -14,11 +20,19 @@ function App() {
       </header>
 
       <main className={styles.main}>
-        {/* Este bloque se sustituirá por el selector de archivo en el siguiente incremento */}
-        <div className={styles.placeholder}>
-          <p className={styles.placeholderTimecode}>00:00 / 00:00</p>
-          <p className={styles.placeholderText}>Próximamente: selecciona tu vídeo aquí.</p>
-        </div>
+        {status === 'ready' && file && videoUrl ? (
+          <VideoPreview
+            videoUrl={videoUrl}
+            fileName={file.name}
+            fileSizeBytes={file.size}
+            duration={duration}
+            onMetadataLoaded={handleMetadataLoaded}
+            onPlaybackError={handlePlaybackError}
+            onRemove={reset}
+          />
+        ) : (
+          <VideoDropzone onFileSelected={selectFile} errorMessage={errorMessage} isLoading={status === 'loading'} />
+        )}
       </main>
 
       <footer className={styles.footer}>
