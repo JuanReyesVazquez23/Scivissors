@@ -2,20 +2,25 @@
 
 Corta fragmentos de vídeo directamente en el navegador. Sin backend, sin subir vídeos a ningún servidor: todo el procesamiento ocurre en el dispositivo del usuario con FFmpeg.wasm.
 
-## Estado actual (incremento 3 de la hoja de ruta)
+## Estado actual (incremento 4 de la hoja de ruta)
 
 Implementado, además de lo anterior:
 
-- Selector de modo de corte (Automático / Manual) una vez cargado el vídeo,
-  con vista previa de cuántos fragmentos saldrían en modo automático (usa la
-  duración real detectada por el navegador).
-- El modo elegido se reinicia automáticamente al cambiar o quitar el vídeo.
+- `VideoSegment` — tipo compartido para un fragmento (`id`, `startTime`, `endTime`),
+  pensado para que el modo automático y el manual usen la misma estructura.
+- `generateAutoSegments()` — genera la lista real de segmentos para el modo
+  automático (ya no es solo una vista previa: son los tiempos exactos que se
+  usarán para cortar). La vista previa del incremento 3 ahora se deriva de esta
+  función, en vez de duplicar el cálculo.
+- `SegmentList` — muestra los fragmentos generados cuando el modo automático
+  está activo.
 
 Pendiente (próximos incrementos):
 
-- Generar de verdad la lista de segmentos en modo automático (`VideoSegment[]`).
-- Editor de cortes manuales (el usuario define tantos fragmentos como quiera).
-- Integración de FFmpeg.wasm (servicio dedicado, aislado de los componentes).
+- Editor de cortes manuales (el usuario define tantos fragmentos como quiera,
+  reutilizando el mismo tipo `VideoSegment`).
+- Integración de FFmpeg.wasm (servicio dedicado, aislado de los componentes) —
+  usará `VideoSegment[]` como entrada, sea cual sea el modo.
 - Descarga de los fragmentos resultantes.
 
 Formatos de vídeo aceptados por ahora: MP4, WebM, MOV y OGV (los que los

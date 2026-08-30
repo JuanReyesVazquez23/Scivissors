@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { CutModeSelector } from './features/video-editor/components/CutModeSelector'
+import { SegmentList } from './features/video-editor/components/SegmentList'
 import { VideoDropzone } from './features/video-editor/components/VideoDropzone'
 import { VideoPreview } from './features/video-editor/components/VideoPreview'
 import { useVideoFile } from './features/video-editor/hooks/useVideoFile'
-import type { CutMode } from './features/video-editor/types'
+import type { CutMode, VideoSegment } from './features/video-editor/types'
+import { generateAutoSegments } from './features/video-editor/utils/segmentMath'
 import styles from './App.module.css'
 
 function App() {
@@ -28,6 +30,16 @@ function App() {
     setCutMode(null)
     reset()
   }, [reset])
+
+  // Los segmentos automáticos se derivan de duration + cutMode: no se
+  // guardan como estado propio porque siempre se pueden recalcular a partir
+  // de datos que ya existen (regla 10: no duplicar en estado lo derivable).
+  const autoSegments: VideoSegment[] = useMemo(() => {
+    if (cutMode !== 'automatic' || duration === null) {
+      return []
+    }
+    return generateAutoSegments(duration)
+  }, [cutMode, duration])
 
   return (
     <div className={styles.appShell}>
@@ -55,7 +67,10 @@ function App() {
             />
 
             {duration !== null ? (
-              <CutModeSelector durationSeconds={duration} selectedMode={cutMode} onSelectMode={setCutMode} />
+              <>
+                <CutModeSelector durationSeconds={duration} selectedMode={cutMode} onSelectMode={setCutMode} />
+                <SegmentList segments={autoSegments} />
+              </>
             ) : (
               <p className={styles.loadingHint}>Cargando duración del vídeo…</p>
             )}

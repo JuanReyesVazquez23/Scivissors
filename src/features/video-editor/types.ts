@@ -12,3 +12,17 @@ export type EditorStatus = 'idle' | 'loading' | 'ready' | 'processing' | 'succes
  */
 export type CutMode = 'automatic' | 'manual'
 
+/**
+ * Un fragmento a cortar del vídeo original. Es la estructura compartida por
+ * el modo automático y el manual: lo único que cambia entre ambos es cómo
+ * se genera esta lista, no cómo se procesa después.
+ */
+export interface VideoSegment {
+  id: string
+  /** Segundos desde el inicio del vídeo. */
+  startTime: number
+  /** Segundos desde el inicio del vídeo. Siempre > startTime. */
+  endTime: number
+}
+
+
