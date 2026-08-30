@@ -43,7 +43,7 @@ export function CutModeSelector({ durationSeconds, selectedMode, onSelectMode }:
 }
 
 function optionClassName(isSelected: boolean): string {
-  return isSelected ? `${styles.option} ${styles.optionSelected}` : styles.option
+  return isSelected ? `${styles.option} ${styles.optionSelected}` : `${styles.option}`
 }
 
 function describeAutoPreview(preview: AutoSegmentPreview): string {
