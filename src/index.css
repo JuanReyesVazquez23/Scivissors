@@ -1,12 +1,21 @@
 :root {
-  /* Paleta: blanco y gris, sin color de acento */
+  /* Paleta base: blanco y gris, sin color de acento */
   --color-bg: #ffffff;
   --color-surface: #f6f6f6;
   --color-border: #e2e2e2;
   --color-border-strong: #cfcfcf;
   --color-text: #1f1f1f;
-  --color-text-muted: #737373;
-  --color-text-faint: #a3a3a3;
+  --color-text-muted: #595959; /* antes #737373: no llegaba a 4.5:1 de contraste (AA) sobre blanco */
+
+  /* Neumorfismo: superficies pasivas (no interactivas). Necesita un gris muy
+     leve (no blanco puro) para que la sombra clara tenga contra qué notarse. */
+  --color-neu-bg: #e9e9ec;
+  --color-neu-shadow-light: #ffffff;
+  --color-neu-shadow-dark: #b6b8bf;
+
+  /* Brutalismo: todo lo accionable/estructural (botones, alertas, acentos).
+     Alto contraste siempre, para que el estado nunca dependa de una sombra sutil. */
+  --color-ink: #111111;
 
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;

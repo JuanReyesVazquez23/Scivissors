@@ -1,0 +1,23 @@
+/*
+ * Neumorfismo — reservado a superficies PASIVAS (no interactivas):
+ * contenedores, marcos, tarjetas. Nunca usar estas clases en botones o
+ * controles: el bajo contraste que define este estilo hace difícil
+ * distinguir sus estados, lo cual es un problema real de accesibilidad
+ * en elementos con los que el usuario interactúa.
+ */
+
+.raised {
+  background: var(--color-neu-bg);
+  border-radius: 20px;
+  box-shadow:
+    8px 8px 16px var(--color-neu-shadow-dark),
+    -8px -8px 16px var(--color-neu-shadow-light);
+}
+
+.inset {
+  background: var(--color-neu-bg);
+  border-radius: 20px;
+  box-shadow:
+    inset 6px 6px 12px var(--color-neu-shadow-dark),
+    inset -6px -6px 12px var(--color-neu-shadow-light);
+}

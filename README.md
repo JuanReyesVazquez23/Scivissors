@@ -61,6 +61,22 @@ Si estos dos pasan localmente, el deploy en Vercel/Netlify no debería fallar po
 
 (Nota: `src/vite-env.d.ts` es necesario para que TypeScript entienda los imports de `.css` y `.module.css`. Si algún día se borra por error, `tsc -b` fallará con `Cannot find module '...css'` — así se detectó y arregló este archivo la primera vez.)
 
+## Diseño: neumorfismo + brutalismo
+
+La interfaz combina dos lenguajes visuales, repartidos por criterio (no mezclados al azar):
+
+- **Neumorfismo** (`src/styles/neumorphic.module.css`, clases `.raised` / `.inset`) — solo en
+  superficies **pasivas**: el slot donde se suelta el vídeo, el marco del preview. Da la
+  sensación "cómoda"/táctil que se pidió.
+- **Brutalismo** (`src/styles/brutalist.module.css`, clases `.panel` / `.button`) — en todo lo
+  **accionable o estructural**: botones, errores, la línea de corte del header. Alto contraste
+  siempre, para que el estado (hover, presionado, deshabilitado) nunca dependa de una sombra sutil.
+
+**Por qué el reparto es así y no al revés:** el neumorfismo clásico en botones es un problema
+de accesibilidad conocido (los estados casi no se distinguen visualmente). Al reservarlo para
+superficies no interactivas y usar brutalismo (alto contraste) en todo lo accionable, se evita
+ese problema sin renunciar a la estética. Nuevos componentes deberían seguir el mismo criterio.
+
 ## Despliegue
 
 Pensado para Vercel como sitio estático (framework preset: Vite). No hace falta `vercel.json` todavía porque no usamos cabeceras especiales; se añadirá si en un futuro incremento usamos el núcleo multi-hilo de FFmpeg.wasm (requiere `Cross-Origin-Opener-Policy` / `Cross-Origin-Embedder-Policy`).

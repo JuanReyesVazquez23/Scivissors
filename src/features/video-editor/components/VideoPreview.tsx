@@ -32,15 +32,17 @@ export function VideoPreview({
 
   return (
     <div className={styles.wrapper}>
-      <video
-        className={styles.video}
-        src={videoUrl}
-        controls
-        onLoadedMetadata={handleLoadedMetadata}
-        onError={onPlaybackError}
-      >
-        Tu navegador no puede reproducir este vídeo.
-      </video>
+      <div className={styles.videoFrame}>
+        <video
+          className={styles.video}
+          src={videoUrl}
+          controls
+          onLoadedMetadata={handleLoadedMetadata}
+          onError={onPlaybackError}
+        >
+          Tu navegador no puede reproducir este vídeo.
+        </video>
+      </div>
 
       <div className={styles.meta}>
         <div className={styles.metaText}>

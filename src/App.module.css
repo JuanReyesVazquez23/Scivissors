@@ -32,7 +32,7 @@
   align-items: center;
   gap: 8px;
   margin-top: 24px;
-  color: var(--color-text-faint);
+  color: var(--color-ink);
 }
 
 .cutLine svg {
@@ -42,7 +42,7 @@
 .dashes {
   flex: 1;
   height: 0;
-  border-top: 1px dashed var(--color-border-strong);
+  border-top: 2px dashed var(--color-ink);
 }
 
 .main {
@@ -60,7 +60,7 @@
 
 .footerText {
   font-size: 12px;
-  color: var(--color-text-faint);
+  color: var(--color-text-muted);
   margin: 0;
   text-align: center;
 }
