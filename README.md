@@ -2,26 +2,19 @@
 
 Corta fragmentos de vídeo directamente en el navegador. Sin backend, sin subir vídeos a ningún servidor: todo el procesamiento ocurre en el dispositivo del usuario con FFmpeg.wasm.
 
-## Estado actual (incremento 2 de la hoja de ruta)
+## Estado actual (incremento 3 de la hoja de ruta)
 
-Implementado:
+Implementado, además de lo anterior:
 
-- Proyecto base con Vite + React + TypeScript (modo estricto).
-- Shell visual de la app (header, contenedor principal, footer) con la paleta blanco/gris.
-- Selección de vídeo (click o arrastrar y soltar) con validación real: extensión,
-  tamaño máximo (500 MB) y firma binaria del archivo (no se confía solo en la
-  extensión ni en el MIME del navegador).
-- Previsualización con el reproductor nativo del navegador (`<video>`), mostrando
-  nombre, tamaño y duración real del archivo.
-- Manejo de memoria: se libera el `Object URL` anterior al cambiar de archivo,
-  al quitar el vídeo y al desmontar el componente.
-- Tests unitarios (Vitest) para la validación de archivos y el formateo de
-  tamaño/duración.
+- Selector de modo de corte (Automático / Manual) una vez cargado el vídeo,
+  con vista previa de cuántos fragmentos saldrían en modo automático (usa la
+  duración real detectada por el navegador).
+- El modo elegido se reinicia automáticamente al cambiar o quitar el vídeo.
 
 Pendiente (próximos incrementos):
 
-- Modo automático (segmentos de 60s + resto).
-- Modo manual (el usuario define los cortes que quiera).
+- Generar de verdad la lista de segmentos en modo automático (`VideoSegment[]`).
+- Editor de cortes manuales (el usuario define tantos fragmentos como quiera).
 - Integración de FFmpeg.wasm (servicio dedicado, aislado de los componentes).
 - Descarga de los fragmentos resultantes.
 

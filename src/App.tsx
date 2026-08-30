@@ -1,11 +1,33 @@
+import { useCallback, useState } from 'react'
+import { CutModeSelector } from './features/video-editor/components/CutModeSelector'
 import { VideoDropzone } from './features/video-editor/components/VideoDropzone'
 import { VideoPreview } from './features/video-editor/components/VideoPreview'
 import { useVideoFile } from './features/video-editor/hooks/useVideoFile'
+import type { CutMode } from './features/video-editor/types'
 import styles from './App.module.css'
 
 function App() {
   const { status, file, videoUrl, duration, errorMessage, selectFile, handleMetadataLoaded, handlePlaybackError, reset } =
     useVideoFile()
+
+  // El modo de corte vive fuera del hook de archivo porque pertenece al
+  // "qué hacer con este vídeo", no al ciclo de vida del archivo en sí. Se
+  // reinicia explícitamente cada vez que cambia el vídeo (ver handlers abajo)
+  // para no arrastrar una selección de un vídeo anterior.
+  const [cutMode, setCutMode] = useState<CutMode | null>(null)
+
+  const handleFileSelected = useCallback(
+    (selectedFile: File) => {
+      setCutMode(null)
+      void selectFile(selectedFile)
+    },
+    [selectFile],
+  )
+
+  const handleRemove = useCallback(() => {
+    setCutMode(null)
+    reset()
+  }, [reset])
 
   return (
     <div className={styles.appShell}>
@@ -21,17 +43,25 @@ function App() {
 
       <main className={styles.main}>
         {status === 'ready' && file && videoUrl ? (
-          <VideoPreview
-            videoUrl={videoUrl}
-            fileName={file.name}
-            fileSizeBytes={file.size}
-            duration={duration}
-            onMetadataLoaded={handleMetadataLoaded}
-            onPlaybackError={handlePlaybackError}
-            onRemove={reset}
-          />
+          <div className={styles.readyState}>
+            <VideoPreview
+              videoUrl={videoUrl}
+              fileName={file.name}
+              fileSizeBytes={file.size}
+              duration={duration}
+              onMetadataLoaded={handleMetadataLoaded}
+              onPlaybackError={handlePlaybackError}
+              onRemove={handleRemove}
+            />
+
+            {duration !== null ? (
+              <CutModeSelector durationSeconds={duration} selectedMode={cutMode} onSelectMode={setCutMode} />
+            ) : (
+              <p className={styles.loadingHint}>Cargando duración del vídeo…</p>
+            )}
+          </div>
         ) : (
-          <VideoDropzone onFileSelected={selectFile} errorMessage={errorMessage} isLoading={status === 'loading'} />
+          <VideoDropzone onFileSelected={handleFileSelected} errorMessage={errorMessage} isLoading={status === 'loading'} />
         )}
       </main>
 

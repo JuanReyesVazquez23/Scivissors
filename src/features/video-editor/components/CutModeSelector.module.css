@@ -1,0 +1,77 @@
+.wrapper {
+  width: 100%;
+  margin-top: 24px;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: var(--color-text);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option {
+  composes: panel from '../../../styles/brutalist.module.css';
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--color-text);
+  transition:
+    background-color 0.1s ease,
+    color 0.1s ease,
+    transform 0.08s ease,
+    box-shadow 0.08s ease;
+}
+
+.option:hover {
+  background: var(--color-surface);
+}
+
+.option:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--color-ink);
+}
+
+.option:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+/* Seleccionado: no solo cambia de color, además queda "presionado" (mismo
+   gesto que el botón brutalista al hacer click) para que el estado se lea
+   sin depender únicamente del color. */
+.optionSelected,
+.optionSelected:hover {
+  background: var(--color-ink);
+  color: #ffffff;
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--color-ink);
+}
+
+.optionTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.optionDescription {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.optionSelected .optionDescription {
+  color: #d6d6d6;
+}
