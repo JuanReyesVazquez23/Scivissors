@@ -38,6 +38,22 @@ depende de sus tipos exactos, y confirmé por búsqueda web la API, las
 versiones actuales y el comportamiento de `-ss`/`-to`, pero el primer
 `npm run build` / prueba real en el navegador es el que da el veredicto final.
 
+**Actualización — velocidad sobre precisión exacta (a petición explícita):**
+el corte ahora **copia el stream** (`-c copy`) en vez de recodificar. Es
+mucho más rápido (de decodificar+codificar todo el fragmento, a solo copiar
+bytes), pero FFmpeg ya no puede cortar en el fotograma exacto pedido: el
+inicio real cae en el keyframe más cercano, lo que puede desviarlo hasta un
+par de segundos según el vídeo de origen. Esto se avisa también en la propia
+interfaz, justo antes del botón de cortar. Además, el archivo de salida
+ahora usa el mismo contenedor que el original (`.webm` → `.webm`, no
+siempre `.mp4`), porque copiar un códec como VP9 dentro de un `.mp4` no
+funciona — solo es válido el mismo contenedor que ya lo soportaba.
+
+Si en algún momento se necesita volver a precisión exacta al fotograma,
+la alternativa es recodificar (como estaba antes) o un "corte inteligente"
+mixto (copiar el tramo entre keyframes, recodificar solo los bordes) — esto
+último es bastante más complejo de implementar bien.
+
 Pendiente: pulido general de UI/UX (responsive, accesibilidad de detalle).
 
 Formatos de vídeo aceptados por ahora: MP4, WebM, MOV y OGV (los que los

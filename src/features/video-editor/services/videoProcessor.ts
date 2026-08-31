@@ -21,8 +21,25 @@ import { clampRatio } from '../utils/clampRatio'
 const FFMPEG_CORE_VERSION = '0.12.10'
 const FFMPEG_CORE_BASE_URL = `https://cdn.jsdelivr.net/npm/@ffmpeg/core@${FFMPEG_CORE_VERSION}/dist/esm`
 
-/** Tiempo máximo por fragmento antes de abortar (FFmpeg.wasm puede colgarse en algunos casos conocidos). */
-const EXEC_TIMEOUT_MS = 3 * 60 * 1000
+/** Tiempo máximo por fragmento antes de abortar. Con copia de stream (no
+ * recodificado) esto debería tardar segundos, no minutos; se deja igual un
+ * margen amplio porque FFmpeg.wasm tiene casos documentados de colgarse. */
+const EXEC_TIMEOUT_MS = 60 * 1000
+
+/** Contenedor de salida = mismo formato que el archivo de origen (necesario:
+ * al copiar el stream tal cual, un códec de vídeo/audio solo es válido
+ * dentro del contenedor que ya lo soportaba — un .webm con VP9 no cabe en
+ * un .mp4, por ejemplo). */
+const CONTAINER_MIME_TYPES: Record<string, string> = {
+  '.mp4': 'video/mp4',
+  '.mov': 'video/quicktime',
+  '.webm': 'video/webm',
+  '.ogv': 'video/ogg',
+}
+
+function getContainerMimeType(extension: string): string {
+  return CONTAINER_MIME_TYPES[extension] ?? 'video/mp4'
+}
 
 export interface CutProgress {
   segmentIndex: number
@@ -146,7 +163,7 @@ export async function cutVideoSegments(
       }
 
       currentSegmentIndex = index
-      const outputFileName = `output-${index}.mp4`
+      const outputFileName = `output-${index}${inputExtension}`
       const duration = segment.endTime - segment.startTime
 
       try {
@@ -161,14 +178,16 @@ export async function cutVideoSegments(
           throw new VideoProcessingError(`FFmpeg no generó correctamente el fragmento ${index + 1}.`)
         }
 
-        const blobUrl = URL.createObjectURL(new Blob([new Uint8Array(data)], { type: 'video/mp4' }))
+        const blobUrl = URL.createObjectURL(
+          new Blob([new Uint8Array(data)], { type: getContainerMimeType(inputExtension) }),
+        )
 
         results.push({
           id: segment.id,
           startTime: segment.startTime,
           endTime: segment.endTime,
           blobUrl,
-          fileName: buildSegmentFileName(file.name, index),
+          fileName: buildSegmentFileName(file.name, index, inputExtension),
         })
       } catch (error) {
         if (error instanceof VideoProcessingError) {
@@ -188,16 +207,23 @@ export async function cutVideoSegments(
 }
 
 /**
- * Ejecuta el corte de un único fragmento.
+ * Ejecuta el corte de un único fragmento **copiando el stream** (sin
+ * recodificar): mucho más rápido que decodificar y volver a codificar, pero
+ * FFmpeg solo puede cortar en un keyframe cuando no decodifica — el inicio
+ * real puede caer hasta unos segundos antes del punto pedido, según cada
+ * cuánto tenga keyframes el vídeo de origen. Es un trade-off consciente:
+ * se priorizó velocidad sobre precisión exacta al fotograma.
  *
- * Importante: -ss va ANTES de -i (búsqueda rápida en el archivo de entrada,
- * en vez de decodificar desde el principio) — mucho más rápido en vídeos
- * largos. La consecuencia es que la línea de tiempo de las opciones de
- * salida se reinicia a 0, así que se usa -t (duración relativa) y NO -to
- * (que sería relativo al punto de búsqueda, no al vídeo original: es un
- * error común y documentado de FFmpeg mezclar esto). Se re-codifica
- * (libx264/aac) en vez de copiar el stream para que el corte sea preciso al
- * fotograma exacto, no solo al keyframe más cercano.
+ * -ss va ANTES de -i (búsqueda rápida en el archivo de entrada, no decodifica
+ * nada antes del punto de corte). La duración se especifica con -t (relativa
+ * al punto de búsqueda) y NO con -to (que sería relativo al vídeo original,
+ * no al punto de búsqueda): con -ss antes de -i la línea de tiempo de las
+ * opciones de salida se reinicia a 0, así que -to dejaría de significar lo
+ * que parece — es un error común y documentado de FFmpeg mezclar esto.
+ *
+ * -avoid_negative_ts make_zero corrige timestamps para que el archivo
+ * resultante se reproduzca bien en la mayoría de reproductores (algunos
+ * fallan con los timestamps "crudos" que deja un corte por copia de stream).
  */
 async function runCut(
   ffmpeg: FFmpeg,
@@ -213,12 +239,10 @@ async function runCut(
     inputFileName,
     '-t',
     String(duration),
-    '-c:v',
-    'libx264',
-    '-preset',
-    'ultrafast',
-    '-c:a',
-    'aac',
+    '-c',
+    'copy',
+    '-avoid_negative_ts',
+    'make_zero',
     outputFileName,
   ])
 }

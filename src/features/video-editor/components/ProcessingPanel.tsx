@@ -23,9 +23,15 @@ export function ProcessingPanel({ file, segments }: ProcessingPanelProps) {
   return (
     <div className={styles.wrapper}>
       {status === 'idle' && (
-        <button type="button" className={styles.processButton} onClick={handleProcess}>
-          Cortar {segments.length} {segmentWord}
-        </button>
+        <>
+          <button type="button" className={styles.processButton} onClick={handleProcess}>
+            Cortar {segments.length} {segmentWord}
+          </button>
+          <p className={styles.hint}>
+            El corte prioriza velocidad: el inicio real puede caer hasta un par de segundos antes del punto exacto
+            pedido, según el vídeo.
+          </p>
+        </>
       )}
 
       {status === 'loading-ffmpeg' && (
