@@ -2,26 +2,43 @@
 
 Corta fragmentos de vídeo directamente en el navegador. Sin backend, sin subir vídeos a ningún servidor: todo el procesamiento ocurre en el dispositivo del usuario con FFmpeg.wasm.
 
-## Estado actual (incremento 4 de la hoja de ruta)
+## Estado actual (incremento 6 de la hoja de ruta)
 
-Implementado, además de lo anterior:
+Implementado, además de lo anterior: **el corte real de vídeo con FFmpeg.wasm**,
+tanto en modo automático como manual, con descarga de los fragmentos.
 
-- `VideoSegment` — tipo compartido para un fragmento (`id`, `startTime`, `endTime`),
-  pensado para que el modo automático y el manual usen la misma estructura.
-- `generateAutoSegments()` — genera la lista real de segmentos para el modo
-  automático (ya no es solo una vista previa: son los tiempos exactos que se
-  usarán para cortar). La vista previa del incremento 3 ahora se deriva de esta
-  función, en vez de duplicar el cálculo.
-- `SegmentList` — muestra los fragmentos generados cuando el modo automático
-  está activo.
+- `services/videoProcessor.ts` — aislado de la UI (sección 7): inicializa
+  FFmpeg una sola vez, escribe el archivo de entrada una sola vez (no una vez
+  por fragmento), corta cada segmento, limpia los archivos temporales
+  siempre (incluso si algo falla), y traduce los fallos a mensajes en
+  español pensados para el usuario.
+- `hooks/useVideoProcessor.ts` + `components/ProcessingPanel.tsx` — botón de
+  cortar, progreso, y enlaces de descarga por fragmento al terminar.
 
-Pendiente (próximos incrementos):
+**Decisiones técnicas importantes (documentadas también en el código):**
 
-- Editor de cortes manuales (el usuario define tantos fragmentos como quiera,
-  reutilizando el mismo tipo `VideoSegment`).
-- Integración de FFmpeg.wasm (servicio dedicado, aislado de los componentes) —
-  usará `VideoSegment[]` como entrada, sea cual sea el modo.
-- Descarga de los fragmentos resultantes.
+- El núcleo de FFmpeg (~31MB) se carga desde un CDN (jsDelivr), no se
+  auto-aloja en el repo. Ningún vídeo del usuario sale del navegador con
+  esto — solo se descarga el motor de FFmpeg en sí, no datos del usuario.
+  Si se prefiere no depender de un CDN externo más adelante, se puede
+  auto-alojar copiando esos archivos a `/public/ffmpeg`.
+- Se usa `-ss` (antes de `-i`, búsqueda rápida) junto con `-t` (duración
+  relativa) — **no** `-to`, porque con `-ss` antes de `-i` la línea de
+  tiempo se reinicia a 0 y `-to` dejaría de ser absoluto (es un error común
+  y documentado de FFmpeg). Se re-codifica (libx264/aac) en vez de copiar
+  el stream, para que el corte sea preciso al fotograma, no solo al
+  keyframe más cercano.
+- Se limita a 3 minutos por fragmento como tope de seguridad (FFmpeg.wasm
+  tiene casos documentados de quedarse colgado sin avisar).
+
+**Aviso de transparencia:** no pude instalar `@ffmpeg/ffmpeg`/`@ffmpeg/util`
+en el entorno donde escribí este código (sin acceso a red), así que no pude
+compilar ni probar esta parte de verdad — verifiqué toda la lógica que no
+depende de sus tipos exactos, y confirmé por búsqueda web la API, las
+versiones actuales y el comportamiento de `-ss`/`-to`, pero el primer
+`npm run build` / prueba real en el navegador es el que da el veredicto final.
+
+Pendiente: pulido general de UI/UX (responsive, accesibilidad de detalle).
 
 Formatos de vídeo aceptados por ahora: MP4, WebM, MOV y OGV (los que los
 navegadores reproducen de forma nativa con `<video>`, necesario para la

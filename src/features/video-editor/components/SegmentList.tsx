@@ -4,9 +4,11 @@ import styles from './SegmentList.module.css'
 
 interface SegmentListProps {
   segments: VideoSegment[]
+  /** Si se pasa, cada fila muestra un botón para quitar ese fragmento (modo manual). */
+  onRemoveSegment?: (id: string) => void
 }
 
-export function SegmentList({ segments }: SegmentListProps) {
+export function SegmentList({ segments, onRemoveSegment }: SegmentListProps) {
   if (segments.length === 0) {
     return null
   }
@@ -22,6 +24,16 @@ export function SegmentList({ segments }: SegmentListProps) {
               {formatDuration(segment.startTime)}–{formatDuration(segment.endTime)}
             </span>
             <span className={styles.length}>{formatDuration(segment.endTime - segment.startTime)}</span>
+            {onRemoveSegment && (
+              <button
+                type="button"
+                className={styles.removeButton}
+                onClick={() => onRemoveSegment(segment.id)}
+                aria-label={`Quitar fragmento ${index + 1}`}
+              >
+                ✕
+              </button>
+            )}
           </li>
         ))}
       </ul>

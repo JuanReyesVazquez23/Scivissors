@@ -25,4 +25,17 @@ export interface VideoSegment {
   endTime: number
 }
 
+/** Estado del procesamiento real con FFmpeg.wasm (independiente del estado del archivo). */
+export type ProcessingStatus = 'idle' | 'loading-ffmpeg' | 'processing' | 'success' | 'error'
+
+/** Un VideoSegment ya cortado, listo para descargar. */
+export interface ProcessedSegment {
+  id: string
+  startTime: number
+  endTime: number
+  /** Object URL del blob resultante; hay que revocarlo cuando ya no se use. */
+  blobUrl: string
+  fileName: string
+}
+
 

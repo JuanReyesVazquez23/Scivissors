@@ -1,0 +1,83 @@
+.wrapper {
+  composes: raised from '../../../styles/neumorphic.module.css';
+  margin-top: 16px;
+  padding: 16px;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fieldLabel {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.fieldRow {
+  display: flex;
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: 2px solid var(--color-ink);
+  border-radius: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  padding: 8px 10px;
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+.useCurrentButton {
+  composes: button from '../../../styles/brutalist.module.css';
+  padding: 8px 10px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.error {
+  composes: panel from '../../../styles/brutalist.module.css';
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  font-size: 13px;
+  color: var(--color-ink);
+}
+
+.addButton {
+  composes: button from '../../../styles/brutalist.module.css';
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
+.hint {
+  margin: 10px 0 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+}

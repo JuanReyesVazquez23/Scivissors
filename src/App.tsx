@@ -1,8 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { CutModeSelector } from './features/video-editor/components/CutModeSelector'
+import { ManualSegmentEditor } from './features/video-editor/components/ManualSegmentEditor'
+import { ProcessingPanel } from './features/video-editor/components/ProcessingPanel'
 import { SegmentList } from './features/video-editor/components/SegmentList'
 import { VideoDropzone } from './features/video-editor/components/VideoDropzone'
 import { VideoPreview } from './features/video-editor/components/VideoPreview'
+import { useManualSegments } from './features/video-editor/hooks/useManualSegments'
 import { useVideoFile } from './features/video-editor/hooks/useVideoFile'
 import type { CutMode, VideoSegment } from './features/video-editor/types'
 import { generateAutoSegments } from './features/video-editor/utils/segmentMath'
@@ -18,18 +21,28 @@ function App() {
   // para no arrastrar una selección de un vídeo anterior.
   const [cutMode, setCutMode] = useState<CutMode | null>(null)
 
+  // Referencia al elemento <video> real (vía forwardRef en VideoPreview),
+  // solo para leer en qué segundo va la reproducción cuando el usuario
+  // toque "usar tiempo actual" en el editor manual.
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const getCurrentPlaybackTime = useCallback(() => videoRef.current?.currentTime ?? 0, [])
+
+  const manualSegments = useManualSegments(duration ?? 0)
+
   const handleFileSelected = useCallback(
     (selectedFile: File) => {
       setCutMode(null)
+      manualSegments.reset()
       void selectFile(selectedFile)
     },
-    [selectFile],
+    [selectFile, manualSegments.reset],
   )
 
   const handleRemove = useCallback(() => {
     setCutMode(null)
+    manualSegments.reset()
     reset()
-  }, [reset])
+  }, [reset, manualSegments.reset])
 
   // Los segmentos automáticos se derivan de duration + cutMode: no se
   // guardan como estado propio porque siempre se pueden recalcular a partir
@@ -40,6 +53,12 @@ function App() {
     }
     return generateAutoSegments(duration)
   }, [cutMode, duration])
+
+  // La lista "activa" es la que realmente se va a cortar, sin importar qué
+  // modo la generó — esto es justo lo que permite que el mismo panel de
+  // procesamiento sirva para ambos modos sin duplicar lógica.
+  const activeSegments: VideoSegment[] =
+    cutMode === 'automatic' ? autoSegments : cutMode === 'manual' ? manualSegments.segments : []
 
   return (
     <div className={styles.appShell}>
@@ -57,6 +76,7 @@ function App() {
         {status === 'ready' && file && videoUrl ? (
           <div className={styles.readyState}>
             <VideoPreview
+              ref={videoRef}
               videoUrl={videoUrl}
               fileName={file.name}
               fileSizeBytes={file.size}
@@ -69,7 +89,21 @@ function App() {
             {duration !== null ? (
               <>
                 <CutModeSelector durationSeconds={duration} selectedMode={cutMode} onSelectMode={setCutMode} />
-                <SegmentList segments={autoSegments} />
+
+                {cutMode === 'automatic' && <SegmentList segments={autoSegments} />}
+
+                {cutMode === 'manual' && (
+                  <>
+                    <ManualSegmentEditor
+                      durationSeconds={duration}
+                      onAddSegment={manualSegments.addSegment}
+                      getCurrentPlaybackTime={getCurrentPlaybackTime}
+                    />
+                    <SegmentList segments={manualSegments.segments} onRemoveSegment={manualSegments.removeSegment} />
+                  </>
+                )}
+
+                {activeSegments.length > 0 && <ProcessingPanel file={file} segments={activeSegments} />}
               </>
             ) : (
               <p className={styles.loadingHint}>Cargando duración del vídeo…</p>

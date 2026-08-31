@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { forwardRef, useCallback } from 'react'
 import type { SyntheticEvent } from 'react'
 import { formatBytes } from '../utils/formatBytes'
 import { formatDuration } from '../utils/formatDuration'
@@ -14,15 +14,10 @@ interface VideoPreviewProps {
   onRemove: () => void
 }
 
-export function VideoPreview({
-  videoUrl,
-  fileName,
-  fileSizeBytes,
-  duration,
-  onMetadataLoaded,
-  onPlaybackError,
-  onRemove,
-}: VideoPreviewProps) {
+export const VideoPreview = forwardRef<HTMLVideoElement, VideoPreviewProps>(function VideoPreview(
+  { videoUrl, fileName, fileSizeBytes, duration, onMetadataLoaded, onPlaybackError, onRemove },
+  videoRef,
+) {
   const handleLoadedMetadata = useCallback(
     (event: SyntheticEvent<HTMLVideoElement>) => {
       onMetadataLoaded(event.currentTarget.duration)
@@ -34,6 +29,7 @@ export function VideoPreview({
     <div className={styles.wrapper}>
       <div className={styles.videoFrame}>
         <video
+          ref={videoRef}
           className={styles.video}
           src={videoUrl}
           controls
@@ -61,4 +57,4 @@ export function VideoPreview({
       </div>
     </div>
   )
-}
+})

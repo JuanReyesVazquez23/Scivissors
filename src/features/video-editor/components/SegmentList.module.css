@@ -49,3 +49,24 @@
 .length {
   color: var(--color-text-muted);
 }
+
+.removeButton {
+  background: transparent;
+  border: none;
+  color: var(--color-ink);
+  font-size: 14px;
+  line-height: 1;
+  padding: 6px;
+  margin: -6px 0;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+
+.removeButton:hover {
+  background: var(--color-border);
+}
+
+.removeButton:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
