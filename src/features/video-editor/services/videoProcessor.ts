@@ -161,7 +161,7 @@ export async function cutVideoSegments(
           throw new VideoProcessingError(`FFmpeg no generó correctamente el fragmento ${index + 1}.`)
         }
 
-        const blobUrl = URL.createObjectURL(new Blob([data], { type: 'video/mp4' }))
+        const blobUrl = URL.createObjectURL(new Blob([new Uint8Array(data)], { type: 'video/mp4' }))
 
         results.push({
           id: segment.id,
