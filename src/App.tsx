@@ -27,7 +27,7 @@ function App() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const getCurrentPlaybackTime = useCallback(() => videoRef.current?.currentTime ?? 0, [])
 
-  const manualSegments = useManualSegments(duration ?? 0)
+  const manualSegments = useManualSegments(duration)
 
   const handleFileSelected = useCallback(
     (selectedFile: File) => {
@@ -107,6 +107,12 @@ function App() {
               </>
             ) : (
               <p className={styles.loadingHint}>Cargando duración del vídeo…</p>
+            )}
+
+            {status === 'error' && errorMessage && (
+              <p className={styles.error} role="alert">
+                {errorMessage}
+              </p>
             )}
           </div>
         ) : (

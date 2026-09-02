@@ -7,7 +7,7 @@ import type { SegmentValidationResult } from '../utils/segmentValidation'
  * A diferencia de los segmentos automáticos (derivados de duration), los
  * manuales son estado real: el usuario decide exactamente cuáles existen.
  */
-export function useManualSegments(durationSeconds: number) {
+export function useManualSegments(durationSeconds: number | null) {
   const [segments, setSegments] = useState<VideoSegment[]>([])
   const nextIdRef = useRef(1)
 

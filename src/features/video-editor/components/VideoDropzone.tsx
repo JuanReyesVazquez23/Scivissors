@@ -58,9 +58,13 @@ export function VideoDropzone({ onFileSelected, errorMessage, isLoading }: Video
     [isLoading],
   )
 
-  const handleDragLeave = useCallback(() => {
-    setIsDragActive(false)
-  }, [])
+  const handleDragLeave = useCallback(
+    (event: DragEvent<HTMLDivElement>) => {
+      event.preventDefault()
+      setIsDragActive(false)
+    },
+    [],
+  )
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {

@@ -16,12 +16,14 @@ export type SegmentValidationResult =
  * usuario nunca es de confianza (puede venir de un parseo fallido, por eso
  * acepta null): nunca se permiten valores negativos o no numéricos, start
  * siempre debe ser menor que end, y end nunca puede superar la duración
- * real del vídeo.
+ * real del vídeo. Si durationSeconds es null, se omite la comprobación de
+ * límite de duración para permitir añadir segmentos mientras se carga la
+ * metadata del vídeo.
  */
 export function validateManualSegment(
   startTime: number | null,
   endTime: number | null,
-  durationSeconds: number,
+  durationSeconds: number | null,
 ): SegmentValidationResult {
   if (startTime === null || !Number.isFinite(startTime) || startTime < 0) {
     return { valid: false, error: { code: 'INVALID_START', message: 'El inicio no es un tiempo válido.' } }
@@ -35,7 +37,7 @@ export function validateManualSegment(
     return { valid: false, error: { code: 'START_AFTER_END', message: 'El inicio debe ser menor que el fin.' } }
   }
 
-  if (endTime > durationSeconds) {
+  if (durationSeconds !== null && endTime > durationSeconds) {
     return {
       valid: false,
       error: {
