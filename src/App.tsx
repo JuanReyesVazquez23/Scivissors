@@ -73,7 +73,11 @@ function App() {
       </header>
 
       <main className={styles.main}>
-        {status === 'ready' && file && videoUrl ? (
+        {status === 'error' && errorMessage ? (
+          <p className={styles.error} role="alert">
+            {errorMessage}
+          </p>
+        ) : status === 'ready' && file && videoUrl ? (
           <div className={styles.readyState}>
             <VideoPreview
               ref={videoRef}
@@ -108,15 +112,11 @@ function App() {
             ) : (
               <p className={styles.loadingHint}>Cargando duración del vídeo…</p>
             )}
-
-            {status === 'error' && errorMessage && (
-              <p className={styles.error} role="alert">
-                {errorMessage}
-              </p>
-            )}
           </div>
+        ) : status === 'loading' ? (
+          <VideoDropzone onFileSelected={handleFileSelected} errorMessage={errorMessage} isLoading={true} />
         ) : (
-          <VideoDropzone onFileSelected={handleFileSelected} errorMessage={errorMessage} isLoading={status === 'loading'} />
+          <VideoDropzone onFileSelected={handleFileSelected} errorMessage={errorMessage} isLoading={false} />
         )}
       </main>
 
