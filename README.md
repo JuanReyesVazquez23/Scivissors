@@ -92,21 +92,50 @@ Si estos dos pasan localmente, el deploy en Vercel/Netlify no debería fallar po
 
 (Nota: `src/vite-env.d.ts` es necesario para que TypeScript entienda los imports de `.css` y `.module.css`. Si algún día se borra por error, `tsc -b` fallará con `Cannot find module '...css'` — así se detectó y arregló este archivo la primera vez.)
 
-## Diseño: neumorfismo + brutalismo
+## Diseño: brutalismo
 
-La interfaz combina dos lenguajes visuales, repartidos por criterio (no mezclados al azar):
+La interfaz usa un único lenguaje visual brutalista (`src/styles/brutalist.module.css`,
+clases `.panel` / `.button` / `.inset`): bordes duros, sombra desplazada sólida, alto
+contraste siempre, para que el estado (hover, presionado, deshabilitado) nunca dependa
+de una sombra sutil.
 
-- **Neumorfismo** (`src/styles/neumorphic.module.css`, clases `.raised` / `.inset`) — solo en
-  superficies **pasivas**: el slot donde se suelta el vídeo, el marco del preview. Da la
-  sensación "cómoda"/táctil que se pidió.
-- **Brutalismo** (`src/styles/brutalist.module.css`, clases `.panel` / `.button`) — en todo lo
-  **accionable o estructural**: botones, errores, la línea de corte del header. Alto contraste
-  siempre, para que el estado (hover, presionado, deshabilitado) nunca dependa de una sombra sutil.
+*(Nota: el proyecto empezó con un híbrido neumorfismo+brutalismo; un rediseño posterior
+lo unificó todo a brutalista. `src/styles/neumorphic.module.css` quedó sin usar en
+ningún componente — no se borró por si se quiere retomar, pero es código muerto.)*
 
-**Por qué el reparto es así y no al revés:** el neumorfismo clásico en botones es un problema
-de accesibilidad conocido (los estados casi no se distinguen visualmente). Al reservarlo para
-superficies no interactivas y usar brutalismo (alto contraste) en todo lo accionable, se evita
-ese problema sin renunciar a la estética. Nuevos componentes deberían seguir el mismo criterio.
+## Bugs encontrados y arreglados al revisar esta versión
+
+Al recibir el proyecto ya trabajado con otra IA, se revisó todo antes de tocar nada más
+(no solo lo que se pidió) y aparecieron dos errores reales, ya arreglados:
+
+- **`composes: inset` roto** en `ProcessingPanel.module.css` — apuntaba a
+  `brutalist.module.css`, pero esa clase no existía ahí (era del archivo neumórfico,
+  huérfano tras el rediseño). Esto rompía el build. Se añadió `.inset` a
+  `brutalist.module.css`.
+- **`styles.error` no existía** en `App.module.css` pese a usarse en `App.tsx` — el
+  mensaje de error se habría mostrado sin ningún estilo. Se añadió, siguiendo el mismo
+  patrón que ya usa el resto de la app.
+
+**Pendiente de decisión, no se tocó:** cuando hay un error de validación de archivo,
+`App.tsx` ahora oculta el dropzone por completo y solo muestra el texto de error — sin
+forma de reintentar sin recargar la página. Antes el dropzone se quedaba visible con el
+error dentro. Puede ser un efecto no querido del rediseño; se dejó así hasta confirmar.
+
+## Icono / "Agregar a pantalla de inicio"
+
+Icono para cuando la web se instala como app (Android/Chrome: "Agregar a pantalla de
+inicio"; iOS/Safari: "Agregar a inicio"). Reutiliza el mismo glifo de tijeras del header,
+blanco sobre `--color-ink`.
+
+Archivos: `public/favicon.png`, `public/apple-touch-icon.png`,
+`public/icons/icon-192.png`, `public/icons/icon-512.png`, `public/manifest.json`.
+Generados desde un SVG fuente que no se versionó (era solo de trabajo) — si cambia el
+logo, hay que regenerar estos PNG a mano.
+
+**Pendiente de confirmar:** el `<title>` de `index.html` y el logo del header dicen
+"Videssors", pero el manifest usa "scivissors" (igual que `package.json`, el README y
+el repo). Quedó así a propósito hasta confirmar cuál es el nombre correcto — hay que
+unificarlo en cuanto se sepa.
 
 ## Despliegue
 

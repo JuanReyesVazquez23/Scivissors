@@ -68,6 +68,15 @@
   text-align: center;
 }
 
+.error {
+  composes: panel from './styles/brutalist.module.css';
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 14px;
+  color: var(--color-ink);
+  text-align: left;
+}
+
 .footer {
   padding: 32px 0 56px;
   border-top: 2px solid var(--color-border);

@@ -47,3 +47,13 @@
   cursor: default;
   transform: none;
 }
+
+/* "Ranura" plana para contenedores de progreso u otros elementos que deben
+   verse hundidos/pasivos en el lenguaje brutalista: mismo borde duro que
+   .panel, pero sin la sombra desplazada (esa sombra implica "esto flota y es
+   accionable", lo contrario de lo que se quiere transmitir aquí). */
+.inset {
+  background: var(--color-surface);
+  border: 2px solid var(--color-ink);
+  border-radius: 0;
+}
