@@ -3,23 +3,22 @@
 }
 
 .videoFrame {
-  composes: raised from '../../../styles/neumorphic.module.css';
-  padding: 12px;
+  composes: panel from '../../../styles/brutalist.module.css';
+  padding: 20px;
 }
 
 .video {
   width: 100%;
-  border-radius: 12px;
-  background: var(--color-ink);
-  display: block;
+  border-radius: 0;
+  background: var(--color-bg);
 }
 
 .meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-top: 16px;
+  gap: 16px;
+  margin-top: 24px;
   flex-wrap: wrap;
 }
 
@@ -29,31 +28,31 @@
 
 .fileName {
   margin: 0;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--color-text);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 380px;
+  max-width: 400px;
 }
 
 .fileInfo {
-  margin: 4px 0 0;
+  margin: 8px 0 0;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-text-muted);
 }
 
 .removeButton {
   composes: button from '../../../styles/brutalist.module.css';
-  padding: 8px 14px;
-  font-size: 13px;
+  padding: 12px 18px;
+  font-size: 14px;
   white-space: nowrap;
 }
 
 @media (max-width: 480px) {
   .fileName {
-    max-width: 200px;
+    max-width: 240px;
   }
 }

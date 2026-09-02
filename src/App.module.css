@@ -3,35 +3,36 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 720px;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
 }
 
 .header {
-  padding-top: 48px;
-  padding-bottom: 8px;
+  padding-top: 64px;
+  padding-bottom: 16px;
 }
 
 .logo {
   font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 600;
+  font-size: 32px;
+  font-weight: 700;
   letter-spacing: -0.02em;
   margin: 0;
+  color: var(--color-ink);
 }
 
 .tagline {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--color-text-muted);
-  margin: 8px 0 0;
+  margin: 12px 0 0;
 }
 
 .cutLine {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 24px;
+  gap: 12px;
+  margin-top: 32px;
   color: var(--color-ink);
 }
 
@@ -42,12 +43,12 @@
 .dashes {
   flex: 1;
   height: 0;
-  border-top: 2px dashed var(--color-ink);
+  border-top: 3px dashed var(--color-ink);
 }
 
 .main {
   flex: 1;
-  padding: 40px 0;
+  padding: 60px 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -57,22 +58,23 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  gap: 32px;
 }
 
 .loadingHint {
-  margin: 16px 0 0;
-  font-size: 13px;
+  margin: 24px 0 0;
+  font-size: 14px;
   color: var(--color-text-muted);
   text-align: center;
 }
 
 .footer {
-  padding: 24px 0 40px;
-  border-top: 1px solid var(--color-border);
+  padding: 32px 0 56px;
+  border-top: 2px solid var(--color-border);
 }
 
 .footerText {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--color-text-muted);
   margin: 0;
   text-align: center;
@@ -80,10 +82,14 @@
 
 @media (max-width: 480px) {
   .header {
-    padding-top: 32px;
+    padding-top: 48px;
   }
 
   .logo {
-    font-size: 24px;
+    font-size: 28px;
+  }
+
+  .main {
+    padding: 40px 0;
   }
 }

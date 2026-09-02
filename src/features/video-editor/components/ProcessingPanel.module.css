@@ -1,54 +1,54 @@
 .wrapper {
-  composes: raised from '../../../styles/neumorphic.module.css';
-  margin-top: 16px;
-  padding: 16px;
+  composes: panel from '../../../styles/brutalist.module.css';
+  margin-top: 24px;
+  padding: 24px;
 }
 
 .processButton {
   composes: button from '../../../styles/brutalist.module.css';
   width: 100%;
-  padding: 12px 14px;
-  font-size: 14px;
+  padding: 16px 20px;
+  font-size: 15px;
 }
 
 .status {
-  margin: 0 0 8px;
-  font-size: 13px;
+  margin: 0 0 12px;
+  font-size: 14px;
   color: var(--color-text-muted);
 }
 
 .hint {
-  margin: 8px 0 0;
-  font-size: 11px;
+  margin: 12px 0 0;
+  font-size: 12px;
   color: var(--color-text-muted);
 }
 
 .progressTrack {
-  composes: inset from '../../../styles/neumorphic.module.css';
-  height: 14px;
+  composes: inset from '../../../styles/brutalist.module.css';
+  height: 20px;
   overflow: hidden;
 }
 
 .progressFill {
   height: 100%;
   background: var(--color-ink);
-  border-radius: 20px;
+  border-radius: 0;
   transition: width 0.2s ease;
 }
 
 .error {
   composes: panel from '../../../styles/brutalist.module.css';
-  margin: 0 0 12px;
-  padding: 10px 12px;
-  font-size: 13px;
+  margin: 0 0 16px;
+  padding: 16px 20px;
+  font-size: 14px;
   color: var(--color-ink);
 }
 
 .heading {
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--color-text);
@@ -56,7 +56,7 @@
 
 .downloadList {
   list-style: none;
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -66,11 +66,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px 0;
-  border-top: 1px solid var(--color-border);
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 2px solid var(--color-border);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .downloadItem:first-child {
@@ -83,8 +83,8 @@
 
 .downloadLink {
   composes: button from '../../../styles/brutalist.module.css';
-  padding: 6px 12px;
-  font-size: 12px;
+  padding: 8px 16px;
+  font-size: 13px;
   text-decoration: none;
   display: inline-block;
 }
@@ -92,7 +92,7 @@
 .resetButton {
   composes: button from '../../../styles/brutalist.module.css';
   width: 100%;
-  padding: 10px 14px;
-  font-size: 13px;
+  padding: 14px 20px;
+  font-size: 14px;
   background: var(--color-surface);
 }

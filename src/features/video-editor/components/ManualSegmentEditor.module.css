@@ -1,14 +1,14 @@
 .wrapper {
-  composes: raised from '../../../styles/neumorphic.module.css';
-  margin-top: 16px;
-  padding: 16px;
+  composes: panel from '../../../styles/brutalist.module.css';
+  margin-top: 24px;
+  padding: 24px;
 }
 
 .heading {
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0 0 12px;
+  margin: 0 0 20px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--color-text);
@@ -17,67 +17,67 @@
 .fields {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .fieldLabel {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-text-muted);
 }
 
 .fieldRow {
   display: flex;
-  gap: 8px;
+  gap: 12px;
 }
 
 .input {
-  flex: 1;
+  width: 100%;
   min-width: 0;
   border: 2px solid var(--color-ink);
   border-radius: 0;
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-mono);
-  font-size: 14px;
-  padding: 8px 10px;
+  font-size: 16px;
+  padding: 12px 16px;
 }
 
 .input:focus-visible {
   outline: 2px solid var(--color-ink);
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 .useCurrentButton {
   composes: button from '../../../styles/brutalist.module.css';
-  padding: 8px 10px;
-  font-size: 11px;
+  padding: 12px 16px;
+  font-size: 13px;
   white-space: nowrap;
 }
 
 .error {
   composes: panel from '../../../styles/brutalist.module.css';
-  margin: 12px 0 0;
-  padding: 10px 12px;
-  font-size: 13px;
+  margin: 16px 0 0;
+  padding: 16px 20px;
+  font-size: 14px;
   color: var(--color-ink);
 }
 
 .addButton {
   composes: button from '../../../styles/brutalist.module.css';
   width: 100%;
-  margin-top: 12px;
-  padding: 10px 14px;
-  font-size: 14px;
+  margin-top: 20px;
+  padding: 14px 20px;
+  font-size: 15px;
 }
 
 .hint {
-  margin: 10px 0 0;
-  font-size: 11px;
+  margin: 16px 0 0;
+  font-size: 12px;
   color: var(--color-text-muted);
 }

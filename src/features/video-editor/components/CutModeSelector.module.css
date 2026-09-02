@@ -1,28 +1,28 @@
 .wrapper {
   width: 100%;
-  margin-top: 24px;
+  margin-top: 32px;
 }
 
 .heading {
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
-  margin: 0 0 12px;
+  margin: 0 0 20px;
   color: var(--color-text);
 }
 
 .options {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .option {
   composes: panel from '../../../styles/brutalist.module.css';
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 16px;
+  gap: 8px;
+  padding: 20px;
   text-align: left;
   cursor: pointer;
   font-family: inherit;
@@ -39,8 +39,8 @@
 }
 
 .option:active {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 var(--color-ink);
+  transform: translate(4px, 4px);
+  box-shadow: 4px 4px 0 var(--color-ink);
 }
 
 .option:focus-visible {
@@ -62,13 +62,13 @@
 .optionTitle {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 15px;
+  font-size: 16px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
 
 .optionDescription {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--color-text-muted);
 }
 

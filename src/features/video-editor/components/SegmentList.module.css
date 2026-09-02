@@ -1,14 +1,14 @@
 .wrapper {
-  composes: raised from '../../../styles/neumorphic.module.css';
-  margin-top: 16px;
-  padding: 16px;
+  composes: panel from '../../../styles/brutalist.module.css';
+  margin-top: 24px;
+  padding: 24px;
 }
 
 .heading {
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 600;
-  margin: 0 0 12px;
+  margin: 0 0 20px;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--color-text);
@@ -25,11 +25,11 @@
 .item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  border-top: 1px solid var(--color-border);
+  gap: 16px;
+  padding: 14px 0;
+  border-top: 2px solid var(--color-border);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .item:first-child {
@@ -38,7 +38,7 @@
 
 .index {
   color: var(--color-text-muted);
-  min-width: 18px;
+  min-width: 20px;
 }
 
 .range {
@@ -54,12 +54,12 @@
   background: transparent;
   border: none;
   color: var(--color-ink);
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1;
-  padding: 6px;
-  margin: -6px 0;
+  padding: 8px;
+  margin: -8px 0;
   cursor: pointer;
-  border-radius: var(--radius-sm);
+  border-radius: 0;
 }
 
 .removeButton:hover {

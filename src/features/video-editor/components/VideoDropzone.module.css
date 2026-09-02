@@ -3,28 +3,23 @@
 }
 
 .dropzone {
-  composes: inset from '../../../styles/neumorphic.module.css';
+  composes: panel from '../../../styles/brutalist.module.css';
   width: 100%;
-  padding: 48px 24px;
+  padding: 64px 32px;
   text-align: center;
   cursor: pointer;
   transition:
-    box-shadow 0.15s ease,
     background-color 0.15s ease,
     opacity 0.15s ease;
 }
 
 .dropzone:hover {
-  box-shadow:
-    inset 8px 8px 16px var(--color-neu-shadow-dark),
-    inset -8px -8px 16px var(--color-neu-shadow-light);
+  background: var(--color-surface);
 }
 
 .dropzoneActive {
-  background: var(--color-border-strong);
-  box-shadow:
-    inset 10px 10px 20px var(--color-neu-shadow-dark),
-    inset -10px -10px 20px var(--color-neu-shadow-light);
+  background: var(--color-ink);
+  color: #ffffff;
 }
 
 .dropzoneDisabled {
@@ -34,21 +29,21 @@
 
 .timecode {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 16px;
   color: var(--color-text-muted);
-  margin: 0 0 12px;
+  margin: 0 0 20px;
 }
 
 .instructions {
   color: var(--color-text-muted);
-  margin: 0 0 4px;
-  font-size: 15px;
+  margin: 0 0 16px;
+  font-size: 16px;
 }
 
 .formats {
   color: var(--color-text-muted);
   margin: 0;
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.02em;
 }
 
@@ -57,16 +52,16 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  margin: 12px 0 0;
-  padding: 10px 12px;
-  font-size: 13px;
+  margin: 16px 0 0;
+  padding: 16px 20px;
+  font-size: 14px;
   color: var(--color-ink);
   text-align: left;
 }
 
 .error svg {
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 /* Input real oculto de forma accesible (no display:none, para no romper el
@@ -85,6 +80,6 @@
 
 @media (max-width: 480px) {
   .dropzone {
-    padding: 32px 16px;
+    padding: 48px 20px;
   }
 }
