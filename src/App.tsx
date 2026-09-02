@@ -63,7 +63,7 @@ function App() {
   return (
     <div className={styles.appShell}>
       <header className={styles.header}>
-        <h1 className={styles.logo}>scivissors</h1>
+        <h1 className={styles.logo}>Videssors</h1>
         <p className={styles.tagline}>Corta fragmentos de vídeo directamente en tu navegador.</p>
 
         <div className={styles.cutLine} aria-hidden="true">
